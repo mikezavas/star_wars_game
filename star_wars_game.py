@@ -89,7 +89,6 @@ def mission_training():
 
     print("\nTest 1: Power control")
     secret = random.randint(1, 7)
-    print(secret)
     for attempt in range(3):
         try:
             guess = int(input(f"Guess the number from 1 to 7 (try {attempt + 1}/3): "))
