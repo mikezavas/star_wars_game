@@ -10,10 +10,12 @@ def mission_battle():
     игрок управляет кораблями против Death Star
     """
     print("The mission: fight with the Death Star!")
+    # создание кораблей игрока
     player1 = XWing("starfighter")
     player2 = XWing("resurgent")
     player3 = XWing("МК75")
 
+    # создание вражеских кораблей
     death_star = DeathStar("Death Star")
     tie1 = TIEFighter("TIE Alfa")
     tie2 = TIEFighter("TIE Beta")
@@ -23,11 +25,13 @@ def mission_battle():
 
     round_num = 1
 
+    # основной цикл битвы
     while (any(s.is_alive for s in rebel_ships) and
            any(s.is_alive for s in imperial_ships)):
 
         print(f"\nRound {round_num}")
 
+        # ход игрока
         if player1.is_alive:
             print("\nYour actions:")
             print("1.Fight TIE Fighter")
@@ -36,6 +40,7 @@ def mission_battle():
             choice = input("Choice: ")
 
             if choice == "1":
+                # поиск живых целей
                 alive_ties = [s for s in imperial_ships if
                               s.is_alive and isinstance(s, TIEFighter)]
                 if alive_ties:
@@ -51,25 +56,27 @@ def mission_battle():
             else:
                 print("Wrong choice!")
 
+        # ход союзников
         for ship in [player2, player3]:
             if ship.is_alive:
                 alive_enemies = [s for s in imperial_ships if s.is_alive]
                 if alive_enemies:
                     target = random.choice(alive_enemies)
                     ship.attack(target)
+        # ход врагов
         for ship in imperial_ships:
             if ship.is_alive:
                 alive_rebels = [s for s in rebel_ships if s.is_alive]
                 if alive_rebels:
                     target = random.choice(alive_rebels)
                     ship.attack(target)
-
+        # регенерация Звезды Смерти
         if not death_star.is_alive:
             death_star.regenerate()
 
         round_num += 1
         time.sleep(1)
-
+    # проверка победы
     if death_star.lives <= 0 and not death_star.is_alive:
         print("\nVictory! The Death Star has been destroyed!!")
         return True, "Death Star Blueprints"
@@ -86,7 +93,7 @@ def mission_training():
     print("Mission: the jedi trials")
 
     print("Yoda: 'You have to pass the tests'")
-
+    # тест 1: угадывание числа
     print("\nTest 1: Power control")
     secret = random.randint(1, 7)
     for attempt in range(3):
@@ -100,10 +107,15 @@ def mission_training():
                 return False, None
             else:
                 print("Wrong. Try again.")
-        except:
+        except ValueError:
             print("Enter a number!")
 
+        except KeyboardInterrupt:
+            print("\nTest interrupted!")
+            raise
+
     print("\nTest 2: Lightsaber combat")
+    # тест 2: бой на световых мечах
     player_hp = 60
     droid_hp = 60
 
@@ -116,6 +128,7 @@ def mission_training():
 
         print(f"Droid: {droid_choice}")
 
+        # логика боя с выбором действий
         if choice == "attack" and droid_choice != "defend":
             droid_hp -= 30
             print("You got it!")
@@ -146,6 +159,7 @@ def mission_smuggling():
     print("Mission: Smuggling race")
 
     print("Han Solo: 'We need to deliver the cargo without the Imperials noticing.'")
+    # начальные ресурсы
     credits = 500
     ship_hp = 200
     ship_shield = 50
@@ -154,6 +168,7 @@ def mission_smuggling():
     print(f"Credits {credits}")
     print(f"Ship: hp={ship_hp}, shield={ship_shield}")
 
+    # покупка улучшений
     print("\nWhat will you buy?")
     print("1. Repair kit (+50 hp, 100 credits)")
     print("2. Shield Booster (+30 shield, 150 credits)")
@@ -174,6 +189,7 @@ def mission_smuggling():
 
     print("\nThere is an asteroid field ahead!")
 
+    # прохождение астероидного поля
     for i in range(3):
         action = input(f"Sector {i + 1}/3. Where to fly? (left/right/straight): ").lower()
 
@@ -192,6 +208,7 @@ def mission_smuggling():
         print("\nThe ship has been destroyed! The mission has failed.")
         return False, None
 
+    # избегание патруля
     print("\nImperial patrol! How to evade?")
     print("1. Hyperjump (70% success)")
     print("2. Hide (50% success)")
@@ -216,6 +233,7 @@ def main():
     system = GameSystem()
     print("STAR WARS: Galactic Missions")
 
+    # меню входа/регистрации
     while True:
         print("\n1. Registration")
         print("2. Log in")
@@ -235,9 +253,11 @@ def main():
         else:
             print("Wrong choice.")
 
+    # основной игровой цикл
     while True:
         info = system.get_player_info()
 
+        # отображение информации об игроке
         print(f"Player: {system.current_player}")
         print(f"Rank: {info['rank']}")
         print(f"Missions: {info['missions']}")
@@ -248,6 +268,7 @@ def main():
             for artifact in info['artifacts']:
                 print(f"  - {artifact}")
 
+        # меню выбора миссии
         print("\nChoose a mission:")
         print("1. Space Battle (difficult)")
         print("2. Jedi Test (medium)")
@@ -259,6 +280,7 @@ def main():
         success = False
         artifact = None
 
+        # запуск выбранной миссии
         if choice == "1":
             success, artifact = mission_battle()
         elif choice == "2":
@@ -272,9 +294,10 @@ def main():
             print("Wrong choice.")
             continue
 
+        # обработка результатов миссии
         if success and artifact:
             print(f"\nMission accomplished! You get artifact: {artifact}")
-
+            # проверка наличия артефакта у игрока
             if artifact in info['artifacts']:
                 print(f"\nYou already have this artifact!")
                 print("Looking for alternative artifact")
@@ -282,12 +305,14 @@ def main():
                 alternative_artifact = system.get_alternative_artifact(artifact)
                 print(f"You receive alternative artifact: {alternative_artifact}")
 
+                # предложение сохранить альтернативный артефакт
                 save = input(f"Add artifact '{alternative_artifact}' to your collection? (yes/no): ").lower()
 
                 if save == "yes":
                     if system.add_artifact_to_player(alternative_artifact):
                         print(f"Artifact '{artifact}' added to your collection!")
 
+                        # проверка завершения коллекции
                         new_info = system.get_player_info()
                         print(f"\nProgress: {len(new_info['artifacts'])}/8 artifacts collected")
 

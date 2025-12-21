@@ -8,7 +8,7 @@ class GameSystem:
     def __init__(self):
         self.players_file = "players.json"
         self.artifacts_file = "artifacts.json"
-        self.current_player = None
+        self.current_player = None  # текущий авторизованный игрок
         self._init_files()
 
     def _init_files(self):
@@ -17,7 +17,7 @@ class GameSystem:
         '''
         if not os.path.exists(self.players_file):
             with open(self.players_file, 'w') as file:
-                json.dump({}, file)
+                json.dump({}, file) # создаем пустой файл игроков
 
         if not os.path.exists(self.artifacts_file):
             artifacts = [
@@ -99,6 +99,7 @@ class GameSystem:
         players[self.current_player]["artifacts"].append(artifact_name)
         players[self.current_player]["missions"] += 1
 
+        # обновление ранга в зависимости от количества артефактов
         artifact_count = len(players[self.current_player]["artifacts"])
         if artifact_count >= 6:
             players[self.current_player]["rank"] = "Jedi Master"
@@ -141,6 +142,7 @@ class GameSystem:
 
         if not available_artifacts:
             print("You have collected all artifacts!")
+            # генерация новых артефактов при сборе всех старых
             new_artifacts = [
                 "New Crystal",  # "Новый кристалл"
                 "Ancient Scroll",  # "Древний свиток"

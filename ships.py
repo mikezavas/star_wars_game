@@ -1,6 +1,11 @@
 import random
 
+
 class StarWarsShip:
+    '''
+    родительский класс кораблей
+    '''
+
     def __init__(self, title, hp, speed, color, damage, shield):
         self.title = title
         self.hp = hp
