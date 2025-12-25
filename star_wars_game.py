@@ -95,7 +95,8 @@ def mission_training():
     print("Yoda: 'You have to pass the tests'")
     # тест 1: угадывание числа
     print("\nTest 1: Power control")
-    secret = random.randint(1, 7)
+    secret = random.randint(1, 6)
+    print(secret)
     for attempt in range(3):
         try:
             guess = int(input(f"Guess the number from 1 to 7 (try {attempt + 1}/3): "))
@@ -297,6 +298,7 @@ def main():
         # обработка результатов миссии
         if success and artifact:
             print(f"\nMission accomplished! You get artifact: {artifact}")
+            info = system.get_player_info()
             # проверка наличия артефакта у игрока
             if artifact in info['artifacts']:
                 print(f"\nYou already have this artifact!")
@@ -310,19 +312,34 @@ def main():
 
                 if save == "yes":
                     if system.add_artifact_to_player(alternative_artifact):
-                        print(f"Artifact '{artifact}' added to your collection!")
+                        print(f"Artifact '{alternative_artifact}' added to your collection!")
 
                         # проверка завершения коллекции
                         new_info = system.get_player_info()
                         print(f"\nProgress: {len(new_info['artifacts'])}/8 artifacts collected")
 
                         if len(new_info['artifacts']) == 8:
-                            print("\nYou've collected ALL artifacts!")
+                            print("\nYou've collected all artifacts!")
                             print("You are now a true Jedi Master!")
                     else:
                         print("Failed to save artifact.")
                 else:
                     print("The artifact was left behind.")
+            else:
+                print(f"\nAdding artifact '{artifact}' to your collection")
+                if system.add_artifact_to_player(artifact):
+                    print(f"Artifact '{artifact}' successfully added!")
+
+                    # проверка завершения коллекции
+                    new_info = system.get_player_info()
+                    print(f"\nProgress: {len(new_info['artifacts'])}/8 artifacts collected")
+
+                    if len(new_info['artifacts']) == 8:
+                        print("You've collected ALL artifacts!")
+                        print("You are now a true Jedi Master!")
+                else:
+                    print("Failed to add artifact.")
+
         elif not success:
             print("\nThe mission failed. Try again!")
 

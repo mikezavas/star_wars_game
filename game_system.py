@@ -92,6 +92,7 @@ class GameSystem:
         with open(self.players_file, 'r') as file:
             players = json.load(file)
 
+        # Проверяем, есть ли уже этот артефакт
         if artifact_name in players[self.current_player]["artifacts"]:
             print(f"You already have the artifact: {artifact_name}")
             return False
@@ -110,11 +111,14 @@ class GameSystem:
         else:
             players[self.current_player]["rank"] = "Initiate"
 
-        with open(self.players_file, 'w') as file:
-            json.dump(players, file)
+        try:
+            with open(self.players_file, 'w') as file:
+                json.dump(players, file, indent=4)
+            return True
+        except Exception as e:
+            print(f"Error saving player data: {e}")
+            return False
 
-        print(f"Artifact '{artifact_name}' has been added to your collection!")
-        return True
 
     def get_available_artifacts(self):
         """
