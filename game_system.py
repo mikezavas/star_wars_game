@@ -17,7 +17,7 @@ class GameSystem:
         '''
         if not os.path.exists(self.players_file):
             with open(self.players_file, 'w') as file:
-                json.dump({}, file) # создаем пустой файл игроков
+                json.dump({}, file)  # создаем пустой файл игроков
 
         if not os.path.exists(self.artifacts_file):
             artifacts = [
@@ -118,7 +118,6 @@ class GameSystem:
         except Exception as e:
             print(f"Error saving player data: {e}")
             return False
-
 
     def get_available_artifacts(self):
         """

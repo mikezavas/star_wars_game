@@ -331,7 +331,7 @@ def main():
                     print(f"Artifact '{artifact}' successfully added!")
 
                     # проверка завершения коллекции
-                    ew_info = system.get_player_info()
+                    new_info = system.get_player_info()
                     print(f"\nProgress: {len(new_info['artifacts'])}/8 artifacts collected")
 
                     if len(new_info['artifacts']) == 8:
