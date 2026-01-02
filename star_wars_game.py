@@ -211,7 +211,7 @@ def mission_smuggling():
     # избегание патруля
     print("\nImperial patrol! How to evade?")
     print("1. Hyperjump (70% success)")
-    print("2. Hide (50% succss)")
+    print("2. Hide (50% success)")
     print("3. Deceive (30% success)")
 
     choice = input("Выбор: ")
