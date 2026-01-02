@@ -7,7 +7,7 @@ def main():
     реализация самой игры
     """
     system = GameSystem()
-    print("STAR WARS: Galactic Missions")
+    print("STAR WARS: Galactic Mssions")
 
     # меню входа/регистрации
     while True:
